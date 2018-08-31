@@ -10,46 +10,49 @@ public class SupprUtilities {
 
         for(int rowInterator = 0; rowInterator< Main.HEIGHT_SIDE; rowInterator++){
             for(int columnIterator = 0; columnIterator< Main.WIDTH_SIDE; columnIterator++){
-                supprimerChiffreDuneListe(zoneStart.get("HEIGHT")+rowInterator, zoneStart.get("WIDTH")+columnIterator, numberToFind);
+                deletePotentialNumberFromPosition(zoneStart.get("HEIGHT")+rowInterator, zoneStart.get("WIDTH")+columnIterator, numberToFind);
             }
         }
     }
 
-    public static void supprimerChiffreDansLaLigneVerticale(int positionVerticalDepart, int positionHorizontalDepart, int chiffreCherche){
-        int incrementRecherche = 0, incrementHorizontal = 0, incrementVertical = 0, pointDeDepartHorizontal = 0, pointDeDepartVertical = 0, longueurduCote;
+    public static void deletePotentialNumberFromRow(int startingColumnPosition, int numberToFind){
+        int incrementResearch = 0;
+        int rowIterator = 1;
+        int rowStartingPosition = 0;
+        int heightLenght;
 
-        incrementVertical++;
-        pointDeDepartHorizontal=positionHorizontalDepart;
-        longueurduCote = Main.HEIGHT_SIDE * Main.HEIGHT_SIDE;
+        heightLenght = Main.HEIGHT_SIDE * Main.HEIGHT_SIDE;
 
-        while(incrementRecherche<longueurduCote){
-            supprimerChiffreDuneListe(pointDeDepartVertical+(incrementVertical*incrementRecherche),
-    pointDeDepartHorizontal+(incrementHorizontal*incrementRecherche),
-                    chiffreCherche);
-            incrementRecherche++;
+        while(incrementResearch<heightLenght){
+            deletePotentialNumberFromPosition(rowStartingPosition+(rowIterator*incrementResearch),
+                    startingColumnPosition,
+                    numberToFind);
+            incrementResearch++;
         }
     }
 
-    public static void supprimerChiffreDansLaLigneHorizontale(int positionVerticalDepart, int positionHorizontalDepart, int chiffreCherche){
-        int incrementRecherche = 0, incrementHorizontal = 0, incrementVertical = 0, pointDeDepartHorizontal = 0, pointDeDepartVertical = 0, longueurduCote;
+    public static void deletePotentialNumberFromColumn(int startingRowPosition, int numberToFind){
+        int incrementResearch = 0;
+        int incrementHorizontal = 0;
+        int columnStartingPosition = 0;
+        int widthLenght;
 
         incrementHorizontal++;
-        pointDeDepartVertical=positionVerticalDepart;
-        longueurduCote = Main.WIDTH_SIDE * Main.WIDTH_SIDE;
+        widthLenght = Main.WIDTH_SIDE * Main.WIDTH_SIDE;
 
-        while(incrementRecherche<longueurduCote){
-            supprimerChiffreDuneListe(pointDeDepartVertical+(incrementVertical*incrementRecherche),
-                    pointDeDepartHorizontal+(incrementHorizontal*incrementRecherche),
-                    chiffreCherche);
-            incrementRecherche++;
+        while(incrementResearch<widthLenght){
+            deletePotentialNumberFromPosition(startingRowPosition,
+                    columnStartingPosition+(incrementHorizontal*incrementResearch),
+                    numberToFind);
+            incrementResearch++;
         }
     }
 
-    public static void supprimerChiffreDuneListe(int positionVertical, int positionHorizontal, int chiffreCherche){
-        List<Integer> listeModifiee = Main.sudoku[positionVertical][positionHorizontal].getPotentialNumbers();
-        if(listeModifiee.contains(chiffreCherche)){
-            listeModifiee.remove(listeModifiee.indexOf(chiffreCherche));
-            Main.sudoku[positionVertical][positionHorizontal].setPotentialNumbers(listeModifiee);
+    public static void deletePotentialNumberFromPosition(int rowPosition, int columnPosition, int numberToFind){
+        List<Integer> modifiedList = Main.sudoku[rowPosition][columnPosition].getPotentialNumbers();
+        if(modifiedList.contains(numberToFind)){
+            modifiedList.remove(modifiedList.indexOf(numberToFind));
+            Main.sudoku[rowPosition][columnPosition].setPotentialNumbers(modifiedList);
         }
     }
 }

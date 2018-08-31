@@ -38,7 +38,7 @@ public class Position{
     }
 
     public String toString(){
-        return "Chiffre valide : "+this.choosenNumber;
+        return "Valid number : "+this.choosenNumber;
     }
 
 }
