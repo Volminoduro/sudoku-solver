@@ -19,10 +19,10 @@ public class Main
         double startTime, endTime, duration;
         List<Double> totalDuration = new ArrayList<Double>();
 
-        for(int solutionFoundIteration=0;solutionFoundIteration<25;solutionFoundIteration++){
+        for(int solutionFoundIteration=0;solutionFoundIteration<10000;solutionFoundIteration++){
             solutionFound=false;
             initializeEmptySudoku();
-            duration = 0;
+            duration = 0.0;
             startTime = System.nanoTime();
             while (!solutionFound && duration < 10){
                 initializeSudoku();
@@ -71,7 +71,7 @@ public class Main
                     }
                 }
                 endTime = System.nanoTime();
-                duration = (endTime - startTime) / 1000000000;
+                duration = (endTime - startTime) / 1000000000.0;
                 solutionFound = isSudokuComplete();
             }
             totalDuration.add(duration);
