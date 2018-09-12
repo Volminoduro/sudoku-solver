@@ -1,7 +1,10 @@
-package second.version;
+package third.version;
+
+import third.version.FindUtilities;
+import third.version.Position;
+import third.version.SupprUtilities;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Main
@@ -14,6 +17,7 @@ public class Main
 
     public static void main(String[] args)
     {
+        // Translate to C/C++ ?
         boolean solutionFound = false;
         double startTime, endTime, duration;
         List<Double> totalDuration = new ArrayList<Double>();
@@ -26,6 +30,7 @@ public class Main
             while (!solutionFound){
                 initializeSudoku();
                 Position[][] actualSudoku = sudoku;
+                // TODO : Try to get the positon with less potentials first
                 for(int i=0; i<actualSudoku.length; i++) {
                     for(int j=0; j<actualSudoku[i].length; j++) {
                         if(0 == actualSudoku[i][j].getChoosenNumber()){
