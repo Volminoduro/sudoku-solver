@@ -17,6 +17,18 @@ public class Main
 
     public static void main(String[] args)
     {
+        // How i'm supposed to do ?
+        // I should through each iteration for the less possibilities
+        // If i didn't change state of one position (so no valid number selected or deletion of potential numbers), i should go to next number of possibilities
+        // I should have a list of all position, sorted by number of possibilities
+        // Once a position have been modified, it should saved the list of position modified that way, and see if it can do smth about that, and so on if it's recursive.
+        // By the way, it shouldn't be done by reference directly, seen the state of the position can be different from a parent modification and a child
+        // (for e.g : Here a A1 position, it have been modified since A0 have been modified. But A2 have been modified too by A0. A2 is altered first beause it have less possibilities
+        // but A2 is finally a valid number, so it have it own children modified, and one of this children is A1)
+        // If my position is not modified, i should go to the next one, and so on
+        // Once i did go through each position, i loop again until my solution is found
+
+
         // Translate to C/C++ ?
         boolean solutionFound = false;
         double startTime, endTime, duration;
