@@ -43,6 +43,8 @@ public class Main
                 initializeSudoku();
                 Position[][] actualSudoku = sudoku;
                 // TODO : Try to get the positon with less potentials first
+
+                // TODO : Delete from searchen positions those who are already valid (what's the point ?)
                 for(int i=0; i<actualSudoku.length; i++) {
                     for(int j=0; j<actualSudoku[i].length; j++) {
                         if(0 == actualSudoku[i][j].getChoosenNumber()){
