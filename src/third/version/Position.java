@@ -1,7 +1,5 @@
 package third.version;
 
-import third.version.Main;
-
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,7 +1,5 @@
 package third.version;
 
-import third.version.Main;
-
 import java.util.HashMap;
 import java.util.Map;
 
