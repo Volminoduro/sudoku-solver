@@ -26,6 +26,8 @@ public class Main
 
 
         // Translate to C/C++ ?
+
+        // TODO : https://dzone.com/articles/jmh-great-java-benchmarking
         boolean solutionFound = false;
         double startTime, endTime, duration;
         List<Double> totalDuration = new ArrayList<Double>();
