@@ -1,127 +1,71 @@
 package third.version;
 
-import third.version.Main;
-
-import java.util.HashMap;
-import java.util.Map;
-
 public class FindUtilities {
 
-    public static boolean findChoosenNumberFromRow(int rowStartingPosition, int columnStartingPosition, int numberToFind){
-        int researchIterator = 0, heightLength;
-
-        heightLength = Main.HEIGHT_SIDE * Main.HEIGHT_SIDE;
-
-        while(researchIterator<heightLength){
-            if (researchIterator!=rowStartingPosition ){
-                if(Main.sudoku[0+(1*researchIterator)][columnStartingPosition]
-                        .getChoosenNumber() == numberToFind){
+    public static boolean findChoosenNumberFromZone(Position position, int choosenNumber){
+        Position startOfZonePosition = FindUtilities.getStartOfZone(position);
+        for(int rowInterator = 0; rowInterator< Main.HEIGHT_SIDE; rowInterator++){
+            for(int columnIterator = 0; columnIterator< Main.WIDTH_SIDE; columnIterator++){
+                if(Main.getSquareFromPosition(new Position(startOfZonePosition.rowPosition+rowInterator, startOfZonePosition.columnPosition+columnIterator)).getChoosenNumber()==choosenNumber){
                     return true;
                 }
             }
-            researchIterator++;
-        }
-        return false;
-    }
-
-    public static boolean findPotentialNumberFromRow(int rowStartingPosition, int columnStartingPosition, int numberToFind){
-        int researchIterator = 0, heightLength;
-
-        heightLength = Main.HEIGHT_SIDE * Main.HEIGHT_SIDE;
-
-        while(researchIterator<heightLength){
-            if (researchIterator!=rowStartingPosition ){
-                if(Main.sudoku[0+(1*researchIterator)][columnStartingPosition]
-                        .getPotentialNumbers().contains(numberToFind)){
-                    return true;
-                }
-            }
-            researchIterator++;
-        }
-        return false;
-    }
-
-    public static boolean findChoosenNumberFromColumn(int rowStartingPosition, int columnStartingPosition, int numberToFind){
-        int researchIterator = 0, widthLength;
-
-        widthLength = Main.WIDTH_SIDE * Main.WIDTH_SIDE;
-
-        while(researchIterator<widthLength){
-            if (researchIterator!=columnStartingPosition ){
-                if(Main.sudoku[rowStartingPosition][0+(1*researchIterator)]
-                        .getChoosenNumber() == numberToFind){
-                    return true;
-                }
-            }
-            researchIterator++;
-        }
-        return false;
-    }
-
-    public static boolean findPotentialNumberFromColumn(int rowStartingPosition, int columnStartingPosition, int numberToFind){
-        int researchIterator = 0, widthLength;
-
-        widthLength = Main.WIDTH_SIDE * Main.WIDTH_SIDE;
-
-        while(researchIterator<widthLength){
-            if (researchIterator!=columnStartingPosition ){
-                if(Main.sudoku[rowStartingPosition][0+(1*researchIterator)]
-                        .getPotentialNumbers().contains(numberToFind)){
-                    return true;
-                }
-            }
-            researchIterator++;
-        }
-        return false;
-    }
-
-    public static boolean findChoosenNumberFromZone(int rowStartingPosition, int columnStartingPosition, int numberToFind){
-        int rowIterator = 0, columnIterator;
-        // Cela me donne le début de la zone
-        Map<String, Integer> startingZone = getStartOfZone(rowStartingPosition, columnStartingPosition);
-
-        while(rowIterator< Main.HEIGHT_SIDE){
-            columnIterator = 0;
-            while(columnIterator< Main.WIDTH_SIDE){
-                if(Main.sudoku[startingZone.get("HEIGHT")+rowIterator][startingZone.get("WIDTH")+columnIterator].getChoosenNumber() == numberToFind){
-                    return true;
-                }
-                columnIterator++;
-            }
-            rowIterator++;
         }
 
         return false;
     }
 
-    public static boolean findPotentialNumberFromZone(int rowStartingPosition, int columnStartingPosition, int numberToFind){
-        int rowIterator = 0, columnIterator = 0;
-        // Cela me donne le début de la zone
-        Map<String, Integer> startingZone = getStartOfZone(rowStartingPosition, columnStartingPosition);
-
-        while(rowIterator< Main.HEIGHT_SIDE){
-            columnIterator = 0;
-            while(columnIterator< Main.WIDTH_SIDE){
-                if(Main.sudoku[startingZone.get("HEIGHT")+rowIterator][startingZone.get("WIDTH")+columnIterator].getPotentialNumbers().contains(numberToFind)){
+    public static boolean findPotentialNumberFromZone(Position position, int potentialNumber){
+        Position startOfZonePosition = FindUtilities.getStartOfZone(position);
+        for(int rowInterator = 0; rowInterator< Main.HEIGHT_SIDE; rowInterator++){
+            for(int columnIterator = 0; columnIterator< Main.WIDTH_SIDE; columnIterator++){
+                if(Main.getSquareFromPosition(new Position(startOfZonePosition.rowPosition+rowInterator, startOfZonePosition.columnPosition+columnIterator)).containsPotentialNumber(potentialNumber)){
                     return true;
                 }
-                columnIterator++;
             }
-            rowIterator++;
+        }
+
+        return false;
+    }
+
+    public static boolean findChoosenNumberFromRow(Position position, int choosenNumber){
+        for(int rowInterator = 0; rowInterator< Main.HEIGHT_SIDE; rowInterator++){
+            if(Main.getSquareFromPosition(new Position(rowInterator, position.columnPosition)).getChoosenNumber()==choosenNumber){
+                return true;
+            }
         }
         return false;
     }
 
-    public static Map<String, Integer> getStartOfZone(int rowStartingPosition, int columnStartingPosition){
-        int rowStartingZonePosition, columnStartingZonePosition;
-        Map<String, Integer> returnPositions = new HashMap<>();
+    public static boolean findPotentialNumberFromRow(Position position, int potentialNumber){
+        for(int rowInterator = 0; rowInterator< Main.HEIGHT_SIDE; rowInterator++){
+            if(Main.getSquareFromPosition(new Position(rowInterator, position.columnPosition)).containsPotentialNumber(potentialNumber)){
+                return true;
+            }
+        }
+        return false;
+    }
 
-        rowStartingZonePosition = rowStartingPosition - (rowStartingPosition % Main.HEIGHT_SIDE);
-        columnStartingZonePosition = columnStartingPosition - (columnStartingPosition % Main.WIDTH_SIDE);
+    public static boolean findChoosenNumberFromColumn(Position position, int choosenNumber){
+        for(int columnIterator = 0; columnIterator< Main.HEIGHT_SIDE; columnIterator++){
+            if(Main.getSquareFromPosition(new Position(position.rowPosition, columnIterator)).getChoosenNumber()==choosenNumber){
+                return true;
+            }
+        }
+        return false;
+    }
 
-        returnPositions.put("HEIGHT", rowStartingZonePosition);
-        returnPositions.put("WIDTH", columnStartingZonePosition);
+    public static boolean findPotentialNumberFromColumn(Position position, int potentialNumber){
+        for(int columnIterator = 0; columnIterator< Main.HEIGHT_SIDE; columnIterator++){
+            if(Main.getSquareFromPosition(new Position(position.rowPosition, columnIterator)).containsPotentialNumber(potentialNumber)){
+                return true;
+            }
+        }
+        return false;
+    }
 
-        return returnPositions;
+    public static Position getStartOfZone(Position position){
+        int rowStartingZonePosition = position.rowPosition, columnStartingZonePosition = position.columnPosition;
+        return new Position(rowStartingZonePosition - (rowStartingZonePosition % Main.HEIGHT_SIDE), columnStartingZonePosition - (columnStartingZonePosition % Main.WIDTH_SIDE));
     }
 }

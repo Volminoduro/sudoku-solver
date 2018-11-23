@@ -1,46 +1,27 @@
 package third.version;
 
-import third.version.Main;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class Position {
 
-    public int choosenNumber;
+    public int rowPosition;
+    public int columnPosition;
 
-    public List<Integer> potentialNumbers = new ArrayList<Integer>();
-
-    public Position(){
-        choosenNumber =0;
-        for(int i = 1; i<(Main.HEIGHT_SIDE * Main.WIDTH_SIDE)+1; i++){
-            potentialNumbers.add(i);
-        }
+    public Position(int rowPosition, int columnPosition) {
+        this.rowPosition = rowPosition;
+        this.columnPosition = columnPosition;
     }
 
-    public Position(Integer chiffre){
-        setChoosenNumber(chiffre);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Position)) return false;
+        Position position = (Position) o;
+        return rowPosition == position.rowPosition && columnPosition == position.columnPosition;
     }
 
-    public int getChoosenNumber(){
-        return this.choosenNumber;
+    @Override
+    public int hashCode() {
+        int result = rowPosition;
+        result = 31 * result + columnPosition;
+        return result;
     }
-
-    public void setChoosenNumber(Integer chiffre){
-        this.choosenNumber =chiffre;
-        potentialNumbers.clear();
-    }
-
-    public List<Integer> getPotentialNumbers(){
-        return this.potentialNumbers;
-    }
-
-    public void setPotentialNumbers(List<Integer> potentialNumbers){
-        this.potentialNumbers = potentialNumbers;
-    }
-
-    public String toString(){
-        return "Valid number : "+this.choosenNumber;
-    }
-
 }
