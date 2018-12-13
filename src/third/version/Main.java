@@ -9,6 +9,7 @@ public class Main
     // TODO Whole Translation to most performant language (C ?)
     // TODO Transform it to a maven project
     // TODO : https://dzone.com/articles/jmh-great-java-benchmarking
+    // TODO : for benchmarking too Java VisualVM
 
     public final static int HEIGHT_SIDE = 3;
     public final static int WIDTH_SIDE = 3;
