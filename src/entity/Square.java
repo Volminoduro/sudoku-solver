@@ -1,27 +1,17 @@
-package third.version;
+package entity;
+
+import starter.SudokuStarter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static third.version.DeletionUtilities.*;
+import static utilities.DeletionUtilities.*;
 
-public class Square {
+public class Square implements Comparable {
 
     public Position position;
     private List<Integer> potentialNumbers = new ArrayList<Integer>();
     private int choosenNumber;
-
-    public Square(){
-        choosenNumber = 0;
-        for(int i = 1; i<(Main.HEIGHT_SIDE * Main.WIDTH_SIDE)+1; i++){
-            potentialNumbers.add(i);
-        }
-    }
-
-    public Square(Position position){
-        this();
-        this.position=position;
-    }
 
     public Square(Position position, Integer chiffre){
         this.position=position;
@@ -30,6 +20,18 @@ public class Square {
         deleteInitialPotentialNumberFromZone(this.position, this.choosenNumber);
         deleteInitialPotentialNumberFromRow(this.position, this.choosenNumber);
         deleteInitialPotentialNumberFromColumn(this.position, this.choosenNumber);
+    }
+
+    public Square(Position position){
+        this();
+        this.position=position;
+    }
+
+    public Square(){
+        choosenNumber = 0;
+        for(int i = 1; i<(SudokuStarter.HEIGHT_SIDE * SudokuStarter.WIDTH_SIDE)+1; i++){
+            potentialNumbers.add(i);
+        }
     }
 
     // TODO A global treatment function for Square
@@ -51,15 +53,13 @@ public class Square {
                     return;
                 }
             } else {
-                deletePotentialNumberFromPotentialNumbers(potentialNumber);
+                deleteFromPotentialNumbers(potentialNumber);
             }
         }
 
     }
 
-
-
-    public boolean deletePotentialNumberFromPotentialNumbers(int potentialNumber){
+    public boolean deleteFromPotentialNumbers(int potentialNumber){
         if (containsPotentialNumber(potentialNumber)){
             this.potentialNumbers.remove(this.potentialNumbers.indexOf(potentialNumber));
             if(this.potentialNumbers.size()==1){
@@ -71,9 +71,9 @@ public class Square {
         return false;
     }
 
-    public boolean deleteInitialPotentialNumberFromPotentialNumbers(int potentialNumber){
-        if (containsPotentialNumber(potentialNumber)){
-            this.potentialNumbers.remove(this.potentialNumbers.indexOf(potentialNumber));
+    public boolean deleteInitialPotentialNumberFromPotentialNumbers(int initialPotentialNumber){
+        if (containsPotentialNumber(initialPotentialNumber)){
+            this.potentialNumbers.remove(this.potentialNumbers.indexOf(initialPotentialNumber));
             if(this.potentialNumbers.size()==1){
                 this.setChoosenNumber(this.potentialNumbers.get(0));
             }
@@ -84,7 +84,7 @@ public class Square {
     }
 
     public void updateSudokuFromChange(){
-        Main.sudoku.put(this.position, this);
+        SudokuStarter.sudoku.put(this.position, this);
         // TODO Force sudoku sorting
     }
 
@@ -107,6 +107,16 @@ public class Square {
     }
 
     public String toString(){
-        return "Square ("+this.position.rowPosition+", "+this.position.columnPosition+") Valid number : "+this.choosenNumber;
+        return "Square ("+this.position.rowPosition+";"+this.position.columnPosition+") " +
+                "| Valid number : "+this.choosenNumber+ " | Potential numbers : "+potentialNumbers.size();
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Square square = (Square) o;
+        if(this.potentialNumbers.size()==square.potentialNumbers.size()){
+            return 0;
+        }
+        return this.potentialNumbers.size()<square.potentialNumbers.size() ? -1 : 1;
     }
 }

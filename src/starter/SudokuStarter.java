@@ -1,33 +1,47 @@
-package third.version;
+package starter;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
+import entity.Position;
+import entity.Square;
+import org.apache.commons.collections4.bidimap.DualTreeBidiMap;
 
-public class Main
+public class SudokuStarter
 {
     // TODO Whole Translation to most performant language (C ?)
-    // TODO Transform it to a maven project
     // TODO : https://dzone.com/articles/jmh-great-java-benchmarking
     // TODO : for benchmarking too Java VisualVM
 
     public final static int HEIGHT_SIDE = 3;
     public final static int WIDTH_SIDE = 3;
-    public static Map<Position, Square> sudoku = new HashMap<Position, Square>();
+    public static DualTreeBidiMap sudoku = new DualTreeBidiMap();
 
     public static void main(String[] args)
     {
+        Position positionZero = new Position(0, 0);
+        Square essai1 = new Square(positionZero);
 
+        Position position1 = new Position(1, 1);
+        Square essai2 = new Square(position1);
 
-        Comparator<Square> squareComparator = new Comparator<Square>() {
-            @Override
-            public int compare(Square o1, Square o2) {
-                // TODO SMA
-                return 0;
-            }
-        };
+        Position position2 = new Position(2, 2);
+        Square essai3 = new Square(position2);
+        essai3.deleteFromPotentialNumbers(8);
+        essai3.deleteFromPotentialNumbers(5);
 
-        // TODO Sorting a map by values
+        sudoku.put(positionZero, essai1);
+        sudoku.put(position1, essai2);
+        sudoku.put(position2, essai3);
+
+        Square alors = (Square) sudoku.get(sudoku.getKey(essai1));
+        alors.deleteFromPotentialNumbers(2);
+
+        int a = 0;
+
+        // TODO : Pour chaque carré :
+        // TODO : Je checke s'il ne lui reste plus qu'un seul possible, ou si son chiffre est possible ailleurs => je sélectionne le chiffre le cas échéant
+        // TODO : Si je sélectionne ou que j'enlève un des possibles, je constitue un set de Square (ordered) qui devra être modifié en fonction
+        // TODO : En appelant une méthode se chargant de ce set, pour chaque square modifié, je les récupère et les ajoute à mon set, et ainsi de suite tant que la liste des sets n'est pas vide.
+        // TODO : Une fois que c'est fait, je réorder ma map de sudoku et je continue tant que le sudoku n'est pas résolu
+
 
         // TODO : Processing
         // TODO : While solution is not found
@@ -37,12 +51,12 @@ public class Main
         // TODO : How to do if A have altered B and C, and B will altered C ? It's not a problem, as we work through references (C second iteration will be just fine after B modification), it still should work BUT we will have a serious lack of performance as the second (C itself) iteration for C should be pointless as B treatment is picking off possibilities
         // TODO : If i did alter any square, i resort the map and should iterate through the start of the map again
         // TODO : In a way, the end of modification of any square is the start of verification of solution found
-
-        initializeEmptySudoku();
-        initializeSudoku();
-        while(!isSudokuComplete()){
-
-        }
+//
+//        initializeEmptySudoku();
+//        initializeSudoku();
+//        while(!isSudokuComplete()){
+//
+//        }
 
         // How i'm supposed to do ?
         // I should through each iteration for the less possibilities
@@ -116,21 +130,18 @@ public class Main
 //                }
 //                solutionFound = isSudokuComplete();
 //            }
-//        }
-        displaySudoku();
+////        }
+//        displaySudoku();
     }
 
     public static Square getSquareFromPosition(Position position){
-        return sudoku.get(position);
+//        return sudoku.get(position);
+        return null;
     }
-//
+
     public static boolean isSudokuComplete(){
-       for(Map.Entry<Position, Square> square : sudoku.entrySet()) {
-            if(!square.getValue().isValidNumber()) {
-                return false;
-            }
-       }
-       return true;
+        final Square lastSquare = (Square) sudoku.get(sudoku.lastKey());
+        return lastSquare.isValidNumber();
     }
 
     public static void initializeEmptySudoku(){
@@ -218,7 +229,7 @@ public class Main
     public static void displaySudoku(){
         for(int rowIterator = 0; rowIterator< HEIGHT_SIDE * HEIGHT_SIDE; rowIterator++){
             for(int columnIterator = 0; columnIterator< WIDTH_SIDE * WIDTH_SIDE; columnIterator++){
-                System.out.printf(sudoku.get(new Position(rowIterator, columnIterator)).getChoosenNumber()+", ");
+//                System.out.printf(sudoku.get(new Position(rowIterator, columnIterator)).getChoosenNumber()+", ");
             }
             System.out.printf("\n");
         }

@@ -1,6 +1,6 @@
-package third.version;
+package entity;
 
-public class Position {
+public class Position implements Comparable {
 
     public int rowPosition;
     public int columnPosition;
@@ -23,5 +23,10 @@ public class Position {
         int result = rowPosition;
         result = 31 * result + columnPosition;
         return result;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return 0;
     }
 }
