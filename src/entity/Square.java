@@ -1,11 +1,10 @@
 package entity;
 
 import starter.SudokuStarter;
+import utilities.FindUtilities;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static utilities.DeletionUtilities.*;
 
 public class Square implements Comparable {
 
@@ -15,11 +14,7 @@ public class Square implements Comparable {
 
     public Square(Position position, Integer chiffre){
         this.position=position;
-        setChoosenNumber(chiffre);
-        // TODO Deletion of potential numbers from zone, column and row
-        deleteInitialPotentialNumberFromZone(this.position, this.choosenNumber);
-        deleteInitialPotentialNumberFromRow(this.position, this.choosenNumber);
-        deleteInitialPotentialNumberFromColumn(this.position, this.choosenNumber);
+        setInitialChoosenNumber(chiffre);
     }
 
     public Square(Position position){
@@ -53,34 +48,79 @@ public class Square implements Comparable {
                     return;
                 }
             } else {
-                deleteFromPotentialNumbers(potentialNumber);
+                deletePotentialNumbers(potentialNumber);
             }
         }
 
     }
 
-    public boolean deleteFromPotentialNumbers(int potentialNumber){
+    /**
+     * Delete a number from potential numbers without repercussion
+     * @param initialPotentialNumber number to delete from potential
+     */
+    private void deleteInitialPotentialNumbers(int initialPotentialNumber){
+        if (containsPotentialNumber(initialPotentialNumber)){
+            this.potentialNumbers.remove(this.potentialNumbers.indexOf(initialPotentialNumber));
+            if(this.potentialNumbers.size()==1){
+                this.setChoosenNumber(this.potentialNumbers.get(0));
+            }
+        }
+    }
+
+    private void deleteInitialPotentialNumberFromColumn(Position position, int choosenNumber) {
+        for(int columnIterator = 0; columnIterator< SudokuStarter.HEIGHT_SIDE; columnIterator++){
+            Square actualSquare = (Square) SudokuStarter.sudoku.getKey(new Position(position.rowPosition, columnIterator));
+            actualSquare.deleteInitialPotentialNumbers(choosenNumber);
+        }
+    }
+
+    private void deleteInitialPotentialNumberFromRow(Position position, int choosenNumber) {
+        for(int rowIterator = 0; rowIterator< SudokuStarter.HEIGHT_SIDE; rowIterator++){
+            Square actualSquare = (Square) SudokuStarter.sudoku.getKey(new Position(rowIterator, position.columnPosition));
+            actualSquare.deleteInitialPotentialNumbers(choosenNumber);
+        }
+    }
+
+    private void deleteInitialPotentialNumberFromZone(Position position, int choosenNumber) {
+        Position startOfZonePosition = FindUtilities.getStartOfZone(position);
+        for(int rowInterator = 0; rowInterator< SudokuStarter.HEIGHT_SIDE; rowInterator++){
+            for(int columnIterator = 0; columnIterator< SudokuStarter.WIDTH_SIDE; columnIterator++){
+                Square actualSquare = (Square) SudokuStarter.sudoku.getKey(new Position(startOfZonePosition.rowPosition+rowInterator, startOfZonePosition.columnPosition+columnIterator));
+                actualSquare.deleteInitialPotentialNumbers(choosenNumber);
+//                SudokuStarter.getSquareFromPosition(new Position(startOfZonePosition.rowPosition+rowInterator, startOfZonePosition.columnPosition+columnIterator)).deletePotentialNumbers(choosenNumber);
+            }
+        }
+    }
+
+    public void deletePotentialNumbers(int potentialNumber){
         if (containsPotentialNumber(potentialNumber)){
             this.potentialNumbers.remove(this.potentialNumbers.indexOf(potentialNumber));
             if(this.potentialNumbers.size()==1){
                 this.setChoosenNumber(this.potentialNumbers.get(0));
             }
             updateSudokuFromChange();
-            return true;
         }
-        return false;
     }
 
-    public boolean deleteInitialPotentialNumberFromPotentialNumbers(int initialPotentialNumber){
-        if (containsPotentialNumber(initialPotentialNumber)){
-            this.potentialNumbers.remove(this.potentialNumbers.indexOf(initialPotentialNumber));
-            if(this.potentialNumbers.size()==1){
-                this.setChoosenNumber(this.potentialNumbers.get(0));
+    public static void deletePotentialNumberFromZone(Position position, int potentialNumber){
+        Position startOfZonePosition = FindUtilities.getStartOfZone(position);
+        for(int rowInterator = 0; rowInterator< SudokuStarter.HEIGHT_SIDE; rowInterator++){
+            for(int columnIterator = 0; columnIterator< SudokuStarter.WIDTH_SIDE; columnIterator++){
+                SudokuStarter.getSquareFromPosition(new Position(startOfZonePosition.rowPosition+rowInterator, startOfZonePosition.columnPosition+columnIterator)).deletePotentialNumbers(potentialNumber);
             }
-            updateSudokuFromChange();
-            return true;
         }
-        return false;
+    }
+
+    public static void deletePotentialNumberFromRow(Position position, int potentialNumber){
+        for(int rowInterator = 0; rowInterator< SudokuStarter.HEIGHT_SIDE; rowInterator++){
+            SudokuStarter.getSquareFromPosition(new Position(rowInterator, position.columnPosition)).deletePotentialNumbers(potentialNumber);
+        }
+    }
+
+    public static void deletePotentialNumberFromColumn(Position position, int potentialNumber){
+        for(int columnIterator = 0; columnIterator< SudokuStarter.HEIGHT_SIDE; columnIterator++){
+            SudokuStarter.getSquareFromPosition(new Position(position.rowPosition, columnIterator)).deletePotentialNumbers(potentialNumber);
+        }
     }
 
     public void updateSudokuFromChange(){
@@ -92,10 +132,20 @@ public class Square implements Comparable {
         return this.choosenNumber;
     }
 
+    public void setInitialChoosenNumber(Integer chiffre){
+        this.choosenNumber = chiffre;
+        potentialNumbers.clear();
+        deleteInitialPotentialNumberFromZone(this.position, this.choosenNumber);
+        deleteInitialPotentialNumberFromRow(this.position, this.choosenNumber);
+        deleteInitialPotentialNumberFromColumn(this.position, this.choosenNumber);
+    }
+
     public void setChoosenNumber(Integer chiffre){
         this.choosenNumber = chiffre;
         potentialNumbers.clear();
-        // TODO : I have to put this number out of possibilities for others Square in Zone, row and column (then call treatment for each of them)
+        deletePotentialNumberFromZone(this.position, chiffre);
+        deletePotentialNumberFromColumn(this.position, chiffre);
+        deletePotentialNumberFromRow(this.position, chiffre);
     }
 
     public boolean isValidNumber(){
@@ -106,17 +156,20 @@ public class Square implements Comparable {
         return this.potentialNumbers.contains(potentialNumber);
     }
 
-    public String toString(){
-        return "Square ("+this.position.rowPosition+";"+this.position.columnPosition+") " +
-                "| Valid number : "+this.choosenNumber+ " | Potential numbers : "+potentialNumbers.size();
-    }
-
     @Override
     public int compareTo(Object o) {
-        Square square = (Square) o;
-        if(this.potentialNumbers.size()==square.potentialNumbers.size()){
+        Square compared = (Square) o;
+        if(this==compared){
             return 0;
         }
-        return this.potentialNumbers.size()<square.potentialNumbers.size() ? -1 : 1;
+        if(this.potentialNumbers.size()==compared.potentialNumbers.size()){
+            return this.position.compareTo(compared.position);
+        }
+        return this.potentialNumbers.size()<compared.potentialNumbers.size() ? -1 : 1;
+    }
+
+    public String toString(){
+        return "["+this.position.rowPosition+";"+this.position.columnPosition+"] " +
+                "| Valid : "+this.choosenNumber+ " | Potentials : "+potentialNumbers.size();
     }
 }
