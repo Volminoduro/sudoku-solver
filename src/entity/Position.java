@@ -11,6 +11,14 @@ public class Position implements Comparable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Position)) return false;
+        Position position = (Position) o;
+        return rowPosition == position.rowPosition && columnPosition == position.columnPosition;
+    }
+
+    @Override
     public int compareTo(Object o) {
         Position compared = (Position) o;
         if(this==compared || this.columnPosition==compared.columnPosition && this.rowPosition==compared.rowPosition){
