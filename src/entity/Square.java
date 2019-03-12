@@ -31,44 +31,22 @@ public class Square implements Comparable {
         }
     }
 
-    // TODO A global treatment function for Square
-    public void treatment(){
-        if(this.isValidNumber()){
-            return;
-        }
-        if(this.potentialNumbers.size()==1){
-            setChoosenNumber(this.potentialNumbers.get(0));
-        }
-        for(int potentialNumber : this.potentialNumbers){
-            // TODO : If i can found this potential number in the zone, column or row
-            if(true){
-                // TODO : If i can found this potential number in the zone, column or row out of this square
-                if(true){
-                    return;
-                } else {
-                    setChoosenNumber(potentialNumber);
-                    return;
-                }
-            } else {
-                deletePotentialNumbers(potentialNumber);
-            }
-        }
-
-    }
-
     /**
      * Delete a number from potential numbers without repercussion
      * @param initialPotentialNumber number to delete from potential
      */
     private boolean deletePotentialNumbers(int initialPotentialNumber){
+        if(isValidNumber()){
+            return false;
+        }
         if (containsPotentialNumber(initialPotentialNumber)){
             this.potentialNumbers.remove(this.potentialNumbers.indexOf(initialPotentialNumber));
             if(this.potentialNumbers.size()==1){
                 this.setChoosenNumber(this.potentialNumbers.get(0));
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     private void deleteInitialPotentialNumberFromColumn(Position position, int choosenNumber) {
@@ -85,6 +63,16 @@ public class Square implements Comparable {
         }
     }
 
+    private void deleteInitialPotentialNumberFromZone(Position position, int choosenNumber) {
+        Position startOfZonePosition = FindUtilities.getStartOfZone(position);
+        for(int rowIterator = 0; rowIterator< SudokuStarter.HEIGHT_SIDE; rowIterator++){
+            for(int columnIterator = 0; columnIterator< SudokuStarter.WIDTH_SIDE; columnIterator++){
+                Square actualSquare = (Square) SudokuStarter.sudoku.getKeyFromValue(new Position(startOfZonePosition.rowPosition+rowIterator, startOfZonePosition.columnPosition+columnIterator));
+                actualSquare.deletePotentialNumbers(choosenNumber);
+            }
+        }
+    }
+
     public Set<Square> treatmentForSudoku(){
         if(!this.isValidNumber()){
             int potentialNumber = this.potentialNumbers.get(0);
@@ -96,22 +84,12 @@ public class Square implements Comparable {
         return null;
     }
 
-    private void deleteInitialPotentialNumberFromZone(Position position, int choosenNumber) {
-        Position startOfZonePosition = FindUtilities.getStartOfZone(position);
-        for(int rowInterator = 0; rowInterator< SudokuStarter.HEIGHT_SIDE; rowInterator++){
-            for(int columnIterator = 0; columnIterator< SudokuStarter.WIDTH_SIDE; columnIterator++){
-                Square actualSquare = (Square) SudokuStarter.sudoku.getKeyFromValue(new Position(startOfZonePosition.rowPosition+rowInterator, startOfZonePosition.columnPosition+columnIterator));
-                actualSquare.deletePotentialNumbers(choosenNumber);
-            }
-        }
-    }
-
     public static Set<Square> deletePotentialNumberFromZone(Position position, int potentialNumber){
         Set<Square> affectedSquares = new TreeSet<>();
         Position startOfZonePosition = FindUtilities.getStartOfZone(position);
-        for(int rowInterator = 0; rowInterator< SudokuStarter.HEIGHT_SIDE; rowInterator++){
+        for(int rowIterator = 0; rowIterator< SudokuStarter.HEIGHT_SIDE; rowIterator++){
             for(int columnIterator = 0; columnIterator< SudokuStarter.WIDTH_SIDE; columnIterator++){
-                Square actualSquare = (Square) SudokuStarter.sudoku.getKeyFromValue(new Position(startOfZonePosition.rowPosition+rowInterator, startOfZonePosition.columnPosition+columnIterator));
+                Square actualSquare = (Square) SudokuStarter.sudoku.getKeyFromValue(new Position(startOfZonePosition.rowPosition+rowIterator, startOfZonePosition.columnPosition+columnIterator));
                 if(actualSquare.deletePotentialNumbers(potentialNumber)){
                     affectedSquares.add(actualSquare);
                 }
