@@ -2,7 +2,6 @@ package entity;
 
 import entity.exceptions.SquareException;
 import starter.SudokuStarter;
-import utilities.FindUtilities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +64,7 @@ public class Square implements Comparable<Square> {
     }
 
     private void deleteInitialPotentialNumberFromZone(Position position, int choosenNumber) {
-        Position startOfZonePosition = FindUtilities.getStartOfZone(position);
+        Position startOfZonePosition = SudokuStarter.sudoku.getStartOfZone(position);
         for(int rowIterator = 0; rowIterator< SudokuStarter.HEIGHT_SIDE; rowIterator++){
             for(int columnIterator = 0; columnIterator< SudokuStarter.WIDTH_SIDE; columnIterator++){
                 Square actualSquare = (Square) SudokuStarter.sudoku.getKeyFromValue(new Position(startOfZonePosition.rowPosition+rowIterator, startOfZonePosition.columnPosition+columnIterator));
@@ -87,10 +86,10 @@ public class Square implements Comparable<Square> {
 
     public static Set<Square> deletePotentialNumberFromZone(Position position, int potentialNumber){
         Set<Square> affectedSquares = new TreeSet<>();
-        Position startOfZonePosition = FindUtilities.getStartOfZone(position);
+        Position startOfZonePosition = SudokuStarter.sudoku.getStartOfZone(position);
         for(int rowIterator = 0; rowIterator< SudokuStarter.HEIGHT_SIDE; rowIterator++){
             for(int columnIterator = 0; columnIterator< SudokuStarter.WIDTH_SIDE; columnIterator++){
-                Square actualSquare = (Square) SudokuStarter.sudoku.getKeyFromValue(new Position(startOfZonePosition.rowPosition+rowIterator, startOfZonePosition.columnPosition+columnIterator));
+                Square actualSquare = SudokuStarter.sudoku.getKeyFromValue(new Position(startOfZonePosition.rowPosition+rowIterator, startOfZonePosition.columnPosition+columnIterator));
                 if(actualSquare.deletePotentialNumbers(potentialNumber)){
                     affectedSquares.add(actualSquare);
                 }
@@ -102,7 +101,7 @@ public class Square implements Comparable<Square> {
     public static Set<Square> deletePotentialNumberFromRow(Position position, int potentialNumber){
         Set<Square> affectedSquares = new TreeSet<>();
         for(int rowIterator = 0; rowIterator< SudokuStarter.HEIGHT_SIDE; rowIterator++){
-            Square actualSquare = (Square) SudokuStarter.sudoku.getKeyFromValue(new Position(rowIterator, position.columnPosition));
+            Square actualSquare = SudokuStarter.sudoku.getKeyFromValue(new Position(rowIterator, position.columnPosition));
             if(actualSquare.deletePotentialNumbers(potentialNumber)){
                 affectedSquares.add(actualSquare);
             }
@@ -113,7 +112,7 @@ public class Square implements Comparable<Square> {
     public static Set<Square> deletePotentialNumberFromColumn(Position position, int potentialNumber){
         Set<Square> affectedSquares = new TreeSet<>();
         for(int columnIterator = 0; columnIterator< SudokuStarter.HEIGHT_SIDE; columnIterator++){
-            Square actualSquare = (Square) SudokuStarter.sudoku.getKeyFromValue(new Position(position.rowPosition, columnIterator));
+            Square actualSquare = SudokuStarter.sudoku.getKeyFromValue(new Position(position.rowPosition, columnIterator));
             if(actualSquare.deletePotentialNumbers(potentialNumber)){
                 affectedSquares.add(actualSquare);
             }
@@ -180,6 +179,7 @@ public class Square implements Comparable<Square> {
         return this.potentialNumbers.size()<compared.potentialNumbers.size() ? -1 : 1;
     }
 
+    @Override
     public String toString(){
         return "["+this.position.rowPosition+";"+this.position.columnPosition+"] " +
                 "| Valid : "+this.choosenNumber+ " | Potentials : "+potentialNumbers.size();

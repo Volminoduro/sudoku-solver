@@ -4,7 +4,9 @@ import entity.Position;
 import entity.Square;
 import utilities.TreeMapSudoku;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 public class SudokuStarter
 {
@@ -14,14 +16,14 @@ public class SudokuStarter
 
     public final static int HEIGHT_SIDE = 3;
     public final static int WIDTH_SIDE = 3;
-    public static TreeMapSudoku sudoku = new TreeMapSudoku();
+    public final static TreeMapSudoku sudoku = new TreeMapSudoku(3, 3);
 
     public static void main(String[] args)
     {
         initializeEmptySudoku();
         initializeSudoku();
-        displaySudoku();
-        while(!isSudokuComplete()){
+        System.out.println(sudoku.toString());
+        while(!sudoku.isSudokuComplete()){
             Iterator<Map.Entry<Square, Position>> iter = sudoku.entrySet().iterator();
             while(iter.hasNext()){
                 Map.Entry<Square, Position> square = iter.next();
@@ -31,24 +33,7 @@ public class SudokuStarter
                 }
             }
         }
-        displaySudoku();
-    }
-
-    public static boolean isSudokuComplete(){
-        final Square firstSquare = (Square) sudoku.firstKey();
-        return firstSquare.isValidNumber();
-    }
-
-    public static void displaySudoku(){
-        // TODO : Use of entrySet would be prefered
-        // TODO : A real Utilities class for displaying purpose
-        for(int rowIterator = 0; rowIterator< HEIGHT_SIDE * HEIGHT_SIDE; rowIterator++){
-            for(int columnIterator = 0; columnIterator< WIDTH_SIDE * WIDTH_SIDE; columnIterator++){
-                Square actualSquare = (Square) sudoku.getKeyFromValue(new Position(rowIterator, columnIterator));
-                System.out.printf(actualSquare.getChoosenNumber()+", ");
-            }
-            System.out.printf("\n");
-        }
+        System.out.println(sudoku.toString());
     }
 
     public static void initializeEmptySudoku(){
@@ -74,7 +59,7 @@ public class SudokuStarter
         position = new Position(2, 2);
         sudoku.putAndReplace(new Square(position, 8), position);
 
-        displaySudoku();
+        System.out.println(sudoku.toString());
 
         position = new Position(0, 4);
         sudoku.putAndReplace(new Square(position, 7), position);
@@ -85,12 +70,12 @@ public class SudokuStarter
         position = new Position(1, 5);
         sudoku.putAndReplace(new Square(position, 5), position);
 
-        displaySudoku();
+        System.out.println(sudoku.toString());
 
         position = new Position(2, 7);
         sudoku.putAndReplace(new Square(position, 5), position);
 
-        displaySudoku();
+        System.out.println(sudoku.toString());
 
         position = new Position(3, 0);
         sudoku.putAndReplace(new Square(position, 8), position);
@@ -99,7 +84,7 @@ public class SudokuStarter
         position = new Position(5, 0);
         sudoku.putAndReplace(new Square(position, 7), position);
 
-        displaySudoku();
+        System.out.println(sudoku.toString());
 
         position = new Position(3, 4);
         sudoku.putAndReplace(new Square(position, 6), position);
@@ -108,7 +93,7 @@ public class SudokuStarter
         position = new Position(4, 5);
         sudoku.putAndReplace(new Square(position, 3), position);
 
-        displaySudoku();
+        System.out.println(sudoku.toString());
 
         position = new Position(3, 8);
         sudoku.putAndReplace(new Square(position, 3), position);
@@ -119,12 +104,12 @@ public class SudokuStarter
         position = new Position(5, 8);
         sudoku.putAndReplace(new Square(position, 6), position);
 
-        displaySudoku();
+        System.out.println(sudoku.toString());
 
         position = new Position(6, 1);
         sudoku.putAndReplace(new Square(position, 6), position);
 
-        displaySudoku();
+        System.out.println(sudoku.toString());
 
         position = new Position(7, 3);
         sudoku.putAndReplace(new Square(position, 4), position);
@@ -135,7 +120,7 @@ public class SudokuStarter
         position = new Position(8, 4);
         sudoku.putAndReplace(new Square(position, 8), position);
 
-        displaySudoku();
+        System.out.println(sudoku.toString());
 
         position = new Position(6, 6);
         sudoku.putAndReplace(new Square(position, 2), position);
@@ -148,7 +133,7 @@ public class SudokuStarter
         position = new Position(8, 8);
         sudoku.putAndReplace(new Square(position, 9), position);
 
-        displaySudoku();
+        System.out.println(sudoku.toString());
     }
 }
 
