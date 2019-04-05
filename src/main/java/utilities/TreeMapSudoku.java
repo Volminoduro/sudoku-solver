@@ -21,10 +21,9 @@ public class TreeMapSudoku extends TreeMap {
     public String toString(){
         String textToDisplay = "";
         // TODO : Use of entrySet would be prefered
-        // TODO : A real Utilities class for displaying purpose
         for(int rowIterator = 0; rowIterator< this.HEIGHT_SIDE * this.HEIGHT_SIDE; rowIterator++){
             for(int columnIterator = 0; columnIterator< this.WIDTH_SIDE * this.WIDTH_SIDE; columnIterator++){
-                Square actualSquare = (Square) this.getKeyFromValue(new Position(rowIterator, columnIterator));
+                Square actualSquare = this.getKeyFromValue(new Position(rowIterator, columnIterator));
                 textToDisplay += actualSquare.getChoosenNumber()+", ";
             }
             textToDisplay +="\n";

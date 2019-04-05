@@ -1,11 +1,12 @@
 package entity;
 
 import entity.exceptions.SquareException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class SquareTest {
@@ -13,21 +14,21 @@ public class SquareTest {
     @Test
     public void compareTo_WithSameObject_Return_0(){
         SquareMock squareMock = new SquareMock(new Position(1, 0), 5);
-        assertEquals(0, squareMock.compareTo(squareMock));
+        Assertions.assertEquals(0, squareMock.compareTo(squareMock));
     }
 
     @Test
     public void compareTo_ChoosenNumberSquare_SamePositionSquare_Return_0(){
         SquareMock squareMock = new SquareMock(new Position(1, 0), 5);
         SquareMock squareCompared = new SquareMock(new Position(1, 0), 4);
-        assertEquals(0, squareMock.compareTo(squareCompared));
+        Assertions.assertEquals(0, squareMock.compareTo(squareCompared));
     }
 
     @Test
     public void compareTo_PotentialNumberSquare_SamePositionSquare_Return_0(){
         SquareMock squareMock = generateSquareMockWithPotentialNumbers(1, 0);
         SquareMock squareCompared = generateSquareMockWithPotentialNumbers(1, 0);
-        assertEquals(0, squareMock.compareTo(squareCompared));
+        Assertions.assertEquals(0, squareMock.compareTo(squareCompared));
     }
 
     /**
@@ -38,28 +39,28 @@ public class SquareTest {
     public void compareTo_ChoosenNumberSquare_FurtherPositionAndChoosenNumberSquare_Return_Negative(){
         SquareMock squareMock = new SquareMock(new Position(1, 0), 5);
         SquareMock squareCompared = generateSquareMockWithChoosenNumbers(2, 0);
-        assertEquals(-1, squareMock.compareTo(squareCompared));
+        Assertions.assertEquals(-1, squareMock.compareTo(squareCompared));
     }
 
     @Test
     public void compareTo_ChoosenNumberSquare_CloserPositionAndChoosenNumberSquare_Return_Positive(){
         SquareMock squareMock = new SquareMock(new Position(1, 0), 5);
         SquareMock squareCompared = generateSquareMockWithChoosenNumbers(0, 0);
-        assertEquals(1, squareMock.compareTo(squareCompared));
+        Assertions.assertEquals(1, squareMock.compareTo(squareCompared));
     }
 
     @Test
     public void compareTo_ChoosenNumberSquare_FurtherPositionAndPotentialNumberSquare_Return_Positive(){
         SquareMock squareMock = new SquareMock(new Position(1, 0), 5);
         SquareMock squareCompared = generateSquareMockWithPotentialNumbers(5, 0);
-        assertEquals(1, squareMock.compareTo(squareCompared));
+        Assertions.assertEquals(1, squareMock.compareTo(squareCompared));
     }
 
     @Test
     public void compareTo_ChoosenNumberSquare_CloserPositionAndPotentialNumberSquare_Return_Positive(){
         SquareMock squareMock = new SquareMock(new Position(1, 0), 5);
         SquareMock squareCompared = generateSquareMockWithPotentialNumbers(0, 5);
-        assertEquals(1, squareMock.compareTo(squareCompared));
+        Assertions.assertEquals(1, squareMock.compareTo(squareCompared));
     }
 
     /**
@@ -70,30 +71,37 @@ public class SquareTest {
     public void compareTo_PotentialNumberSquare_CloserPositionAndSameQuantityPotentialNumberSquare_Return_Positive(){
         SquareMock squareMock = generateSquareMockWithPotentialNumbers(1, 0);
         SquareMock squareCompared = generateSquareMockWithPotentialNumbers(0, 5);
-        assertEquals(1, squareMock.compareTo(squareCompared));
+        Assertions.assertEquals(1, squareMock.compareTo(squareCompared));
     }
 
     @Test
     public void compareTo_PotentialNumberSquare_FurtherPositionAndSameQuantityPotentialNumberSquare_Return_Negative(){
         SquareMock squareMock = generateSquareMockWithPotentialNumbers(1, 0);
         SquareMock squareCompared = generateSquareMockWithPotentialNumbers(2, 5);
-        assertEquals(-1, squareMock.compareTo(squareCompared));
+        Assertions.assertEquals(-1, squareMock.compareTo(squareCompared));
     }
 
     @Test
     public void compareTo_LessPotentialNumberSquare_AndMoreQuantityPotentialNumberSquare_Return_Negative(){
         SquareMock squareMock = generateSquareMockWithPotentialNumbers(1, 0);
-        squareMock.potentialNumbers.remove(1);
+        List<Integer> potentialNumbers = squareMock.getPotentialNumbers();
+        potentialNumbers.remove(1);
+        squareMock.setPotentialNumbers(potentialNumbers);
+
         SquareMock squareCompared = generateSquareMockWithPotentialNumbers(2, 5);
-        assertEquals(-1, squareMock.compareTo(squareCompared));
+        Assertions.assertEquals(-1, squareMock.compareTo(squareCompared));
     }
 
     @Test
     public void compareTo_MorePotentialNumberSquare_AndLessQuantityPotentialNumberSquare_Return_Positive(){
         SquareMock squareMock = generateSquareMockWithPotentialNumbers(1, 0);
+
         SquareMock squareCompared = generateSquareMockWithPotentialNumbers(2, 5);
-        squareCompared.potentialNumbers.remove(1);
-        assertEquals(1, squareMock.compareTo(squareCompared));
+        List<Integer> potentialNumbers = squareCompared.getPotentialNumbers();
+        potentialNumbers.remove(1);
+        squareCompared.setPotentialNumbers(potentialNumbers);
+
+        Assertions.assertEquals(1, squareMock.compareTo(squareCompared));
     }
 
     /**
@@ -131,8 +139,10 @@ public class SquareTest {
 
     private SquareMock generateSquareMockWithUniquePotentialNumbers(Integer rowPosition, Integer columnPosition){
         SquareMock squareMock = new SquareMock(new Position(rowPosition, columnPosition));
-        squareMock.potentialNumbers = new ArrayList();
-        squareMock.potentialNumbers.add(1);
+        List<Integer> potentialNumbers = new ArrayList();
+        potentialNumbers.add(1);
+        squareMock.setPotentialNumbers(potentialNumbers);
+
         return squareMock;
     }
 
@@ -149,6 +159,14 @@ public class SquareTest {
         public void setInitialChoosenNumber(Integer chiffre){
             this.choosenNumber = chiffre;
             potentialNumbers.clear();
+        }
+
+        public List<Integer> getPotentialNumbers(){
+            return this.potentialNumbers;
+        }
+
+        public void setPotentialNumbers(List<Integer> potentialNumbers){
+            this.potentialNumbers = potentialNumbers;
         }
     }
 }
