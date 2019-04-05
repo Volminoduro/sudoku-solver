@@ -1,5 +1,6 @@
 package entity;
 
+import entity.exceptions.SquareException;
 import starter.SudokuStarter;
 import utilities.FindUtilities;
 
@@ -8,11 +9,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class Square implements Comparable {
+public class Square implements Comparable<Square> {
 
     public Position position;
-    private List<Integer> potentialNumbers = new ArrayList<Integer>();
-    private int choosenNumber;
+    protected List<Integer> potentialNumbers = new ArrayList<Integer>();
+    protected int choosenNumber;
 
     public Square(Position position, Integer chiffre){
         this.position=position;
@@ -24,7 +25,7 @@ public class Square implements Comparable {
         this.position=position;
     }
 
-    public Square(){
+    private Square(){
         choosenNumber = 0;
         for(int i = 1; i<(SudokuStarter.HEIGHT_SIDE * SudokuStarter.WIDTH_SIDE)+1; i++){
             potentialNumbers.add(i);
@@ -149,19 +150,32 @@ public class Square implements Comparable {
     }
 
     @Override
-    public int compareTo(Object o) {
-        Square compared = (Square) o;
-        if(this==compared){
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Square)) return false;
+        Square square = (Square) o;
+        return this.position.equals(square.position);
+    }
+
+    @Override
+    public int compareTo(Square compared) {
+        if(equals(compared)){
             return 0;
+        }
+        if(this.isValidNumber()&& compared.isValidNumber() && this.choosenNumber==compared.choosenNumber){
+            throw new SquareException("Same choosen number detected, this can't be.");
+        }
+        if(this.potentialNumbers.size()==1 && this.potentialNumbers.size()==compared.potentialNumbers.size() && this.potentialNumbers.get(0)==compared.potentialNumbers.get(0)){
+            throw new SquareException("Same unique potential number detected, this can't be.");
+        }
+        if(this.isValidNumber() && compared.isValidNumber() || this.potentialNumbers.size()==compared.potentialNumbers.size()){
+            return this.position.compareTo(compared.position);
         }
         if(this.isValidNumber()){
             return 1;
         }
         if(compared.isValidNumber()){
             return -1;
-        }
-        if(this.potentialNumbers.size()==compared.potentialNumbers.size()){
-            return this.position.compareTo(compared.position);
         }
         return this.potentialNumbers.size()<compared.potentialNumbers.size() ? -1 : 1;
     }

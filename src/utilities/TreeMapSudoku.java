@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class TreeMapSudoku<K, V> extends TreeMap {
+public class TreeMapSudoku extends TreeMap {
 
     public Square getKeyFromValue(Position positionToFound){
         Iterator it = this.entrySet().iterator();
@@ -21,8 +21,8 @@ public class TreeMapSudoku<K, V> extends TreeMap {
     }
 
     // TODO : Remove doesn't seems to work
-    public void putAndReplace(Square square, Position position){
-        this.remove(this.getKeyFromValue(position));
-        this.put(square, position);
+    public void putAndReplace(Square squareToPut, Position positionToReplace){
+        this.remove(this.getKeyFromValue(positionToReplace));
+        this.put(squareToPut, positionToReplace);
     }
 }

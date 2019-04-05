@@ -14,7 +14,7 @@ public class SudokuStarter
 
     public final static int HEIGHT_SIDE = 3;
     public final static int WIDTH_SIDE = 3;
-    public static TreeMapSudoku sudoku = new TreeMapSudoku<>();
+    public static TreeMapSudoku sudoku = new TreeMapSudoku();
 
     public static void main(String[] args)
     {
@@ -35,17 +35,8 @@ public class SudokuStarter
     }
 
     public static boolean isSudokuComplete(){
-        Iterator<Map.Entry<Square, Position>> iter = sudoku.entrySet().iterator();
-        while(iter.hasNext()){
-            Map.Entry<Square, Position> square = iter.next();
-            boolean isValid = square.getKey().isValidNumber();
-            if(!isValid){
-                return isValid;
-            }
-        }
-        return true;
-//        final Square lastSquare = (Square) sudoku.lastKey();
-//        return lastSquare.isValidNumber();
+        final Square firstSquare = (Square) sudoku.firstKey();
+        return firstSquare.isValidNumber();
     }
 
     public static void displaySudoku(){

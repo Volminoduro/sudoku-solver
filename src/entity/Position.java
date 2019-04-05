@@ -1,6 +1,6 @@
 package entity;
 
-public class Position implements Comparable {
+public class Position implements Comparable<Position> {
 
     public final int rowPosition;
     public final int columnPosition;
@@ -19,9 +19,8 @@ public class Position implements Comparable {
     }
 
     @Override
-    public int compareTo(Object o) {
-        Position compared = (Position) o;
-        if(this==compared || this.columnPosition==compared.columnPosition && this.rowPosition==compared.rowPosition){
+    public int compareTo(Position compared) {
+        if(equals(compared)){
             return 0;
         }
         if(this.rowPosition<compared.rowPosition){
