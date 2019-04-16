@@ -1,11 +1,43 @@
-package java.entity;
+package entity;
 
-import entity.Position;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PositionTest {
+
+    @Test
+    public void equals_WithSameObject_Return_True(){
+        Position position = new Position(1, 0);
+        assertTrue(position.equals(position));
+    }
+
+    @Test
+    public void equals_WithDifferentClassObject_Return_False(){
+        Position position = new Position(1, 0);
+        assertFalse(position.equals(new Object()));
+    }
+
+    @Test
+    public void equals_WithDifferentRowPosition_Return_False(){
+        Position position = new Position(1, 0);
+        Position positionEquals = new Position(0, 0);
+        assertFalse(position.equals(positionEquals));
+    }
+
+    @Test
+    public void equals_WithDifferentColumnPosition_Return_False(){
+        Position position = new Position(1, 0);
+        Position positionEquals = new Position(1, 1);
+        assertFalse(position.equals(positionEquals));
+    }
+
+    @Test
+    public void equals_WithSameRowPositionAndSameColumnPosition_Return_True(){
+        Position position = new Position(1, 0);
+        Position positionEquals = new Position(1, 0);
+        assertTrue(position.equals(positionEquals));
+    }
 
     @Test
     public void compareTo_WithSameObject_Return_0(){

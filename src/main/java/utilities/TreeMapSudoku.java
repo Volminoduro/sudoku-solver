@@ -2,7 +2,6 @@ package utilities;
 
 import entity.Position;
 import entity.Square;
-import starter.SudokuStarter;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -26,26 +25,14 @@ public class TreeMapSudoku extends TreeMap {
         }
     }
 
-    // TODO : Remove doesn't seems to work
-    public void putAndReplace(Square squareToPut, Position positionToReplace){
-        this.remove(this.getKeyFromValue(positionToReplace));
-        this.put(squareToPut, positionToReplace);
-    }
-
     public void putAndReplace(Square squareToPut){
         this.putAndReplace(squareToPut, squareToPut.getPosition());
     }
 
-    public void deleteInitialPotentialNumberFromColumn(Position position, int choosenNumber) {
-        this.getSquaresFromColumn(position).forEach(square -> square.deletePotentialNumbers(choosenNumber));
-    }
-
-    public void deleteInitialPotentialNumberFromRow(Position position, int choosenNumber) {
-        this.getSquaresFromRow(position).forEach(square -> square.deletePotentialNumbers(choosenNumber));
-    }
-
-    public void deleteInitialPotentialNumberFromZone(Position position, int choosenNumber) {
-        this.getSquaresFromZone(position).forEach(square -> square.deletePotentialNumbers(choosenNumber));
+    // TODO : Remove doesn't seems to work
+    public void putAndReplace(Square squareToPut, Position positionToReplace){
+        this.remove(this.getKeyFromValue(positionToReplace));
+        this.put(squareToPut, positionToReplace);
     }
 
     public Set<Square> deletePotentialNumberFromRow(Position position, int potentialNumber){
