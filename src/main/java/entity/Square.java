@@ -49,7 +49,8 @@ public class Square implements Comparable<Square> {
             }
             return true;
         }
-        throw new ImpossiblePotentialNumberDeletionSquareException("We can't delete potential number not contained in potential numbers !");
+        return false;
+//        throw new ImpossiblePotentialNumberDeletionSquareException("We can't delete potential number not contained in potential numbers !");
     }
 
     public Set<Square> treatmentForSudoku(){

@@ -60,7 +60,7 @@ public class TreeMapSudoku extends TreeMap {
 
     public Collection<Square> getSquaresFromRow(Position position){
         Collection<Square> squares = new LinkedHashSet<>();
-        for(int rowIterator = 0; rowIterator< this.HEIGHT_SIDE; rowIterator++){
+        for(int rowIterator = 0; rowIterator< this.HEIGHT_SIDE*this.HEIGHT_SIDE; rowIterator++){
             squares.add(this.getKeyFromValue(new Position(rowIterator, position.columnPosition)));
         }
         return squares;
@@ -68,7 +68,7 @@ public class TreeMapSudoku extends TreeMap {
 
     public Collection<Square> getSquaresFromColumn(Position position){
         Collection<Square> squares = new LinkedHashSet<>();
-        for(int columnIterator = 0; columnIterator< this.HEIGHT_SIDE; columnIterator++){
+        for(int columnIterator = 0; columnIterator< this.WIDTH_SIDE*this.WIDTH_SIDE; columnIterator++){
             squares.add(this.getKeyFromValue(new Position(position.rowPosition, columnIterator)));
         }
         return squares;
