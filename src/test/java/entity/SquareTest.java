@@ -1,6 +1,5 @@
 package entity;
 
-import entity.exceptions.ImpossiblePotentialNumberDeletionSquareException;
 import entity.exceptions.SameChoosenNumberSquareException;
 import entity.exceptions.SameUniquePotentialNumberSquareException;
 import org.junit.jupiter.api.Test;
@@ -63,13 +62,13 @@ public class SquareTest {
     public void deletePotentialNumbers_WithOnlyPossiblePotentialNumber_Return_Exception(){
         SquareMock square = new SquareMock(new Position(1, 0));
         square.setPotentialNumbers(new ArrayList<>(1));
-        assertThrows(ImpossiblePotentialNumberDeletionSquareException.class, () -> {square.deletePotentialNumbers(1);});
+        assertFalse(square.deletePotentialNumbers(1));
     }
 
     @Test
-    public void deletePotentialNumbers_NotPossibleInPotentialNumberAndNotValidNumber_Return_Exception(){
+    public void deletePotentialNumbers_NotPossibleInPotentialNumberAndValidNumber_Return_Exception(){
         Square square = new Square(new Position(1, 0));
-        assertThrows(ImpossiblePotentialNumberDeletionSquareException.class, () -> {square.deletePotentialNumbers(Integer.MIN_VALUE);});
+        assertFalse(square.deletePotentialNumbers(Integer.MIN_VALUE));
     }
 
     @Test

@@ -1,6 +1,5 @@
 package entity;
 
-import entity.exceptions.ImpossiblePotentialNumberDeletionSquareException;
 import entity.exceptions.SameChoosenNumberSquareException;
 import entity.exceptions.SameUniquePotentialNumberSquareException;
 import starter.SudokuStarter;
@@ -50,7 +49,6 @@ public class Square implements Comparable<Square> {
             return true;
         }
         return false;
-//        throw new ImpossiblePotentialNumberDeletionSquareException("We can't delete potential number not contained in potential numbers !");
     }
 
     public Set<Square> treatmentForSudoku(){
