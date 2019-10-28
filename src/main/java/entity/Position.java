@@ -31,7 +31,7 @@ public class Position implements Comparable<Position> {
             } else if (this.columnPosition>compared.columnPosition) {
                 return 1;
             }
-        } else if(this.rowPosition>compared.rowPosition){
+        } else {
             return 1;
         }
         return 0;

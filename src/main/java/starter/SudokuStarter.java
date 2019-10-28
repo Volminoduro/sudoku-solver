@@ -33,7 +33,7 @@ public class SudokuStarter
         System.out.println(sudoku.toString());
     }
 
-    public static void initializeSudoku(){
+    private static void initializeSudoku(){
         sudoku.putAndReplace(new Square(new Position(0, 0), 5));
         sudoku.putAndReplace(new Square(new Position(0, 1), 3));
         sudoku.putAndReplace(new Square(new Position(1, 0), 6));

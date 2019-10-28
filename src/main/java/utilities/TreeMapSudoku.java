@@ -18,8 +18,8 @@ public class TreeMapSudoku extends TreeMap {
 
     public void initializeEmptySudoku(){
         for(int iteratorHeight = 0; iteratorHeight< this.HEIGHT_SIDE * this.HEIGHT_SIDE; iteratorHeight++){
-            for(int iteratorWidht = 0; iteratorWidht< this.WIDTH_SIDE * this.WIDTH_SIDE; iteratorWidht++){
-                Position position = new Position(iteratorHeight, iteratorWidht);
+            for(int iteratorWidth = 0; iteratorWidth< this.WIDTH_SIDE * this.WIDTH_SIDE; iteratorWidth++){
+                Position position = new Position(iteratorHeight, iteratorWidth);
                 this.put(new Square(position), position);
             }
         }
@@ -30,7 +30,7 @@ public class TreeMapSudoku extends TreeMap {
     }
 
     // TODO : Remove doesn't seems to work
-    public void putAndReplace(Square squareToPut, Position positionToReplace){
+    private void putAndReplace(Square squareToPut, Position positionToReplace){
         this.remove(this.getKeyFromValue(positionToReplace));
         this.put(squareToPut, positionToReplace);
     }
@@ -47,18 +47,17 @@ public class TreeMapSudoku extends TreeMap {
         return this.getSquaresFromZone(position).stream().filter(square -> square.deletePotentialNumbers(potentialNumber)).collect(Collectors.toSet());
     }
 
-    public Square getKeyFromValue(Position positionToFound){
-        Iterator it = this.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry) it.next();
-            if(positionToFound.equals(pair.getValue())){
+    private Square getKeyFromValue(Position positionToFound){
+        for (Object o : this.entrySet()) {
+            Map.Entry pair = (Map.Entry) o;
+            if (positionToFound.equals(pair.getValue())) {
                 return (Square) pair.getKey();
             }
         }
         return null;
     }
 
-    public Collection<Square> getSquaresFromRow(Position position){
+    private Collection<Square> getSquaresFromRow(Position position){
         Collection<Square> squares = new LinkedHashSet<>();
         for(int rowIterator = 0; rowIterator< this.HEIGHT_SIDE*this.HEIGHT_SIDE; rowIterator++){
             squares.add(this.getKeyFromValue(new Position(rowIterator, position.columnPosition)));
@@ -66,7 +65,7 @@ public class TreeMapSudoku extends TreeMap {
         return squares;
     }
 
-    public Collection<Square> getSquaresFromColumn(Position position){
+    private Collection<Square> getSquaresFromColumn(Position position){
         Collection<Square> squares = new LinkedHashSet<>();
         for(int columnIterator = 0; columnIterator< this.WIDTH_SIDE*this.WIDTH_SIDE; columnIterator++){
             squares.add(this.getKeyFromValue(new Position(position.rowPosition, columnIterator)));
@@ -74,7 +73,7 @@ public class TreeMapSudoku extends TreeMap {
         return squares;
     }
 
-    public Collection<Square> getSquaresFromZone(Position position){
+    private Collection<Square> getSquaresFromZone(Position position){
         Collection<Square> squares = new LinkedHashSet<>();
         Position startOfZonePosition = this.getStartOfZone(position);
         for(int rowIterator = 0; rowIterator< this.HEIGHT_SIDE; rowIterator++){
@@ -85,7 +84,7 @@ public class TreeMapSudoku extends TreeMap {
         return squares;
     }
 
-    public Position getStartOfZone(Position position){
+    private Position getStartOfZone(Position position){
         int rowStartingZonePosition = position.rowPosition, columnStartingZonePosition = position.columnPosition;
         return new Position(rowStartingZonePosition - (rowStartingZonePosition % this.HEIGHT_SIDE), columnStartingZonePosition - (columnStartingZonePosition % this.WIDTH_SIDE));
     }
@@ -97,16 +96,16 @@ public class TreeMapSudoku extends TreeMap {
 
     @Override
     public String toString(){
-        String textToDisplay = "";
+        StringBuilder textToDisplay = new StringBuilder();
         // TODO : Use of entrySet would be prefered
         for(int rowIterator = 0; rowIterator< this.HEIGHT_SIDE * this.HEIGHT_SIDE; rowIterator++){
             for(int columnIterator = 0; columnIterator< this.WIDTH_SIDE * this.WIDTH_SIDE; columnIterator++){
                 Square actualSquare = this.getKeyFromValue(new Position(rowIterator, columnIterator));
-                textToDisplay += actualSquare.getChoosenNumber()+", ";
+                textToDisplay.append(actualSquare.getChosenNumber()).append(", ");
             }
-            textToDisplay +="\n";
+            textToDisplay.append("\n");
         }
-        return textToDisplay;
+        return textToDisplay.toString();
     }
 
     public int getHEIGHT_SIDE() {

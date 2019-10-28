@@ -1,8 +1,8 @@
 package entity.exceptions;
 
-public abstract class SquareException extends RuntimeException {
+abstract class SquareException extends RuntimeException {
 
-    public SquareException(String message){
+    SquareException(String message){
         super(message);
     }
 }

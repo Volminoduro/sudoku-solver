@@ -1,6 +1,6 @@
 package entity;
 
-import entity.exceptions.SameChoosenNumberSquareException;
+import entity.exceptions.SameChosenNumberSquareException;
 import entity.exceptions.SameUniquePotentialNumberSquareException;
 import starter.SudokuStarter;
 
@@ -11,13 +11,13 @@ import java.util.Set;
 
 public class Square implements Comparable<Square> {
 
-    protected Position position;
-    protected List<Integer> potentialNumbers = new ArrayList<>();
-    protected int choosenNumber;
+    private Position position;
+    List<Integer> potentialNumbers = new ArrayList<>();
+    int chosenNumber;
 
-    public Square(Position position, Integer chiffre){
+    public Square(Position position, Integer number){
         this.position=position;
-        setChoosenNumber(chiffre);
+        setChosenNumber(number);
     }
 
     public Square(Position position){
@@ -26,7 +26,7 @@ public class Square implements Comparable<Square> {
     }
 
     private Square(){
-        choosenNumber = 0;
+        chosenNumber = 0;
         for(int i = 1; i<(SudokuStarter.sudoku.getHEIGHT_SIDE() * SudokuStarter.sudoku.getWIDTH_SIDE())+1; i++){
             potentialNumbers.add(i);
         }
@@ -43,7 +43,7 @@ public class Square implements Comparable<Square> {
         if (containsPotentialNumber(potentialNumber) && this.potentialNumbers.size()>1){
             this.potentialNumbers.remove(this.potentialNumbers.indexOf(potentialNumber));
             if(this.potentialNumbers.size()==1){
-                this.setChoosenNumber(this.potentialNumbers.get(0));
+                this.setChosenNumber(this.potentialNumbers.get(0));
                 return false;
             }
             return true;
@@ -62,23 +62,23 @@ public class Square implements Comparable<Square> {
         return Collections.emptySet();
     }
 
-    public int getChoosenNumber(){
-        return this.choosenNumber;
+    public int getChosenNumber(){
+        return this.chosenNumber;
     }
 
-    public void setChoosenNumber(Integer chiffre){
-        this.choosenNumber = chiffre;
+    void setChosenNumber(Integer number){
+        this.chosenNumber = number;
         potentialNumbers.clear();
-        SudokuStarter.sudoku.deletePotentialNumberFromZone(this.position, chiffre);
-        SudokuStarter.sudoku.deletePotentialNumberFromColumn(this.position, chiffre);
-        SudokuStarter.sudoku.deletePotentialNumberFromRow(this.position, chiffre);
+        SudokuStarter.sudoku.deletePotentialNumberFromZone(this.position, number);
+        SudokuStarter.sudoku.deletePotentialNumberFromColumn(this.position, number);
+        SudokuStarter.sudoku.deletePotentialNumberFromRow(this.position, number);
     }
 
     public boolean isValidNumber(){
-        return potentialNumbers.isEmpty() && !(0==choosenNumber);
+        return potentialNumbers.isEmpty() && !(0== chosenNumber);
     }
 
-    public boolean containsPotentialNumber(int potentialNumber){
+    private boolean containsPotentialNumber(int potentialNumber){
         return this.potentialNumbers.contains(potentialNumber);
     }
 
@@ -95,8 +95,8 @@ public class Square implements Comparable<Square> {
         if(equals(compared)){
             return 0;
         }
-        if(this.isValidNumber() && compared.isValidNumber() && this.choosenNumber==compared.choosenNumber){
-            throw new SameChoosenNumberSquareException("Same choosen number detected, this can't be.");
+        if(this.isValidNumber() && compared.isValidNumber() && this.chosenNumber ==compared.chosenNumber){
+            throw new SameChosenNumberSquareException("Same chosen number detected, this can't be.");
         }
         if(this.potentialNumbers.size()==1 && this.potentialNumbers.size()==compared.potentialNumbers.size() && this.potentialNumbers.get(0)==compared.potentialNumbers.get(0)){
             throw new SameUniquePotentialNumberSquareException("Same unique potential number detected, this can't be.");
@@ -124,6 +124,6 @@ public class Square implements Comparable<Square> {
     @Override
     public String toString(){
         return "["+this.position.rowPosition+";"+this.position.columnPosition+"] " +
-                "| Valid : "+this.choosenNumber+ " | Potentials : "+potentialNumbers.size();
+                "| Valid : "+this.chosenNumber + " | Potentials : "+potentialNumbers.size();
     }
 }
